@@ -48,7 +48,7 @@ void TargetSelector::selectTargets(Actor *wearer, TCODList<Actor *> &list) {
         {
             int x, y;
             engine.gui->message(TCODColor::cyan, "Left-click to select an enemy,\nor right-click to cancel ");
-            if (engine.pickATile(&x, &y, range)) {
+            if (engine.pickATile(&x, &y)) {
                 for (Actor **iterator = engine.actors.begin();
                      iterator != engine.actors.end(); iterator++) {
                     Actor *actor = *iterator;

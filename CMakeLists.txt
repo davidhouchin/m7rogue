@@ -1,7 +1,7 @@
 project(rogue)
 cmake_minimum_required(VERSION 2.8)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -ggdb -Wl,-rpath . ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -ggdb ${CMAKE_CXX_FLAGS}")
 
 aux_source_directory(./src SRC)
 include_directories(./include)
