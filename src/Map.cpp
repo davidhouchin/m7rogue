@@ -200,7 +200,7 @@ void Map::addItem(int x, int y) {
 		healthPotion->blocks = false;
         healthPotion->pickable = new Pickable(
                     new TargetSelector(TargetSelector::SELF, NULL),
-                    new HealthEffect(4, "%s gets healed for %g hit points"));
+                    new HealthEffect(4, TCODColor::green, "%s gets healed for %g hit points"));
         engine.actors.push(healthPotion);
 	} else if (dice < 70 + 10) {
 		Actor *scrollOfLightningBolt = new Actor(x, y, '#', "scroll of lightning bolt",
@@ -208,7 +208,7 @@ void Map::addItem(int x, int y) {
 		scrollOfLightningBolt->blocks = false;
         scrollOfLightningBolt->pickable = new Pickable(
                     new TargetSelector(TargetSelector::CLOSEST_MONSTER, 5),
-                    new HealthEffect(-20, "A lightning bolt strikes the %s with a loud thunder!\n"
+                    new HealthEffect(-20, TCODColor::yellow, "A lightning bolt strikes the %s with a loud thunder!\n"
                                      "The damage is %g hit points"));
 		engine.actors.push(scrollOfLightningBolt);
 	} else if (dice < 70 + 10 + 10) {
@@ -217,7 +217,7 @@ void Map::addItem(int x, int y) {
 		scrollOfFireball->blocks = false;
         scrollOfFireball->pickable = new Pickable(
                     new TargetSelector(TargetSelector::SELECTED_RANGE, 3),
-                    new HealthEffect(-12, "The %s gets burned for %g hit points."));
+                    new HealthEffect(-12, TCODColor::orange, "The %s gets burned for %g hit points."));
 		engine.actors.push(scrollOfFireball);
 	} else {
         Actor *scrollOfConfusion = new Actor(x, y, '#', "scroll of confusion",
@@ -225,7 +225,7 @@ void Map::addItem(int x, int y) {
 		scrollOfConfusion->blocks = false;
         scrollOfConfusion->pickable = new Pickable(
                     new TargetSelector(TargetSelector::SELECTED_MONSTER, 5),
-                    new AiChangeEffect(new ConfusedMonsterAi(10),
+                    new AiChangeEffect(new ConfusedMonsterAi(10), TCODColor::green,
                                        "The eyes of the %s look vacant,\nas they start to stumble around!"));
         engine.actors.push(scrollOfConfusion);
 	}

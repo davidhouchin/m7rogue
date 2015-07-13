@@ -35,8 +35,9 @@ class HealthEffect : public Effect {
 public:
     float amount;
     const char *message;
+    TCODColor color;
 
-    HealthEffect(float amount, const char *message);
+    HealthEffect(float amount, const TCODColor &color, const char *message);
     bool applyTo(Actor *actor);
 
     void load(TCODZip &zip);
@@ -47,8 +48,9 @@ class AiChangeEffect : public Effect {
 public:
     TemporaryAi *newAi;
     const char *message;
+    TCODColor color;
 
-    AiChangeEffect(TemporaryAi *newAi, const char *message);
+    AiChangeEffect(TemporaryAi *newAi, const TCODColor &color, const char *message);
     bool applyTo(Actor *actor);
 
     void load(TCODZip &zip);

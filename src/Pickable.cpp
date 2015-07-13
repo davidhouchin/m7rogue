@@ -81,15 +81,15 @@ Effect *Effect::create(TCODZip &zip) {
     EffectType type = (EffectType)zip.getInt();
     Effect *effect = NULL;
     switch (type) {
-        case HEALTH: effect = new HealthEffect(0, NULL); break;
-        case AI_CHANGE: effect = new AiChangeEffect(NULL, NULL); break;
+        case HEALTH: effect = new HealthEffect(0, TCODColor::white, NULL); break;
+    case AI_CHANGE: effect = new AiChangeEffect(NULL, TCODColor::white, NULL); break;
     }
     effect->load(zip);
     return effect;
 }
 
-HealthEffect::HealthEffect(float amount, const char *message) :
-    amount(amount), message(message) {}
+HealthEffect::HealthEffect(float amount, const TCODColor &color, const char *message) :
+    amount(amount), color(color), message(message) {}
 
 bool HealthEffect::applyTo(Actor *actor) {
     if (!actor->destructible) return false;
@@ -99,14 +99,14 @@ bool HealthEffect::applyTo(Actor *actor) {
 
         if (pointsHealed > 0) {
             if (message) {
-                engine.gui->message(TCODColor::lightGrey, message, actor->name, pointsHealed);
+                engine.gui->message(color, message, actor->name, pointsHealed);
             }
 
             return true;
         }
     } else {
         if (message && -amount - actor->destructible->defense > 0) {
-            engine.gui->message(TCODColor::lightGrey, message, actor->name,
+            engine.gui->message(color, message, actor->name,
                                 -amount - actor->destructible->defense);
         }
         if (actor->destructible->takeDamage(actor, -amount) > 0) {
@@ -120,21 +120,23 @@ bool HealthEffect::applyTo(Actor *actor) {
 void HealthEffect::save(TCODZip &zip) {
     zip.putInt(Effect::HEALTH);
     zip.putInt(amount);
+    zip.putColor(&color);
     zip.putString(message);
 }
 
 void HealthEffect::load(TCODZip &zip) {
     amount = zip.getInt();
+    color = zip.getColor();
     message = strdup(zip.getString());
 }
 
-AiChangeEffect::AiChangeEffect(TemporaryAi *newAi, const char *message) :
-    newAi(newAi), message(message) {}
+AiChangeEffect::AiChangeEffect(TemporaryAi *newAi, const TCODColor &color, const char *message) :
+    newAi(newAi), color(color), message(message) {}
 
 bool AiChangeEffect::applyTo(Actor *actor) {
     newAi->applyTo(actor);
     if (message) {
-        engine.gui->message(TCODColor::lightGrey, message, actor->name);
+        engine.gui->message(color, message, actor->name);
     }
     return true;
 }
@@ -142,11 +144,13 @@ bool AiChangeEffect::applyTo(Actor *actor) {
 void AiChangeEffect::save(TCODZip &zip) {
     zip.putInt(Effect::AI_CHANGE);
     newAi->save(zip);
+    zip.putColor(&color);
     zip.putString(message);
 }
 
 void AiChangeEffect::load(TCODZip &zip) {
     newAi = dynamic_cast<TemporaryAi*>(Ai::create(zip));
+    color = zip.getColor();
     message = strdup(zip.getString());
 }
 
